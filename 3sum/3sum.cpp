@@ -45,11 +45,14 @@ int main()
     Solution s;
     vector<int> nums = {-4, 4, 2, 1, -5, -1, 3, -2, 1, 0};
     auto results = s.threeSum(nums);
-    if (results.size() > 0) {
+    auto compounds = results.size();
+    if ( compounds > 0) {
+	 int count = 0;
         for (auto result : results) {
+	    cout << "compound " << ++count << endl;	
             auto b = result.begin();
             while (b != result.end()) {
-                cout << *b << endl;
+                cout << *b << '\t';
                 b++;
             }
         }
