@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 #include "..\header\Tree.hpp"
 using namespace std;
 
@@ -17,65 +16,46 @@ return its level order traversal as:
     [9,20],
     [15,7]
 ] */
+typedef TreeNode* tn;
 
 class Solution {
 public:
-    void LevelTraverse(TreeNode<int> &root) {
+    void LevelTraverse(tn root) {
 
-        vector<vector<TreeNode<int>&>> Levels;
-        stack<TreeNode<int>&> stack;
-
-        TreeNode<int> &curr = root;
+        vector<vector<tn>> Levels;
         int level = 0;
-        Levels.push_back(vector<TreeNode<int>&>());
-        Levels[level].push_back(curr);
-        if  (curr.left != 0) {
-            stack.push(curr.left);
-        }
-        if (curr.right != 0) {
-            stack.push(curr.right);
-        }
-        while( true ) {
-            
-            level++;
-            Levels.push_back(vector<TreeNode<int>&>());
-            curr = stack.top();
-            Levels[level].push_back(curr);
-            
-            stack.pop();
-            
-            for (TreeNode<int>& node : Levels[level]) {
-                TreeNode<int> &curr = node;
-                if  (curr.left != 0) {
-                    stack.push(curr.left);
-                }
-                if (curr.right != 0) {
-                    stack.push(curr.right);
-                }       
-            }
-            if (stack.size == 0) return;
-        }
-        
+        _Recur(root, level, Levels);
+
         cout << '[';
         for (int i = 0; i < level; i++) {
             cout << '\t' << '[';
-            for ( TreeNode<int>& node : Levels[i]) {
-                cout << " " << node.val << ',';
+            for ( tn node : Levels[i]) {
+                cout << " " << node->val << ',';
             }
             cout << ']' << endl;
         }
         cout << ']' << endl;
     }
+
+    void _Recur(tn root, int& level,vector<vector<tn>> &Levels) {
+        if (root = nullptr) return;
+        if ( level - Levels.size() == 0 ) {
+            Levels.push_back(vector<tn>());
+        }
+        level++;
+        _Recur(root->left, level, Levels);
+        _Recur(root->right, level, Levels);
+    }
 };
 
 int main () {
     Solution s;
-    TreeNode<int> root(3);
-    root.left = TreeNode(9);
-    root.right = TreeNode(20);
+    tn root = new TreeNode(3);
+    root->left = new TreeNode(9);
+    root->right = new TreeNode(20);
     
-    root.right.left = new TreeNode(15);
-    root.right.left = new TreeNode(7);
+    root->right->left = new TreeNode(15);
+    root->right->left = new TreeNode(7);
     s.LevelTraverse(root);
     return 0;
 }
