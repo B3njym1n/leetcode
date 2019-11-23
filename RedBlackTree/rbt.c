@@ -224,3 +224,19 @@ void preorderTraverse(RedBlackTree T) {
   printf("%d ", T->Element);
   preorderTraverse(T->Right);
 }
+
+/* assume tree's root node is dump node */
+int maxDepth(RedBlackTree T) {
+  if (T == NullNode ) return 0;
+  int ml = maxDepth(T->Right->Left);
+  int mr = maxDepth(T->Right->Right);
+  return (ml > mr ? ml : mr) + 1;
+}
+
+int minDepth(RedBlackTree T) {
+  if (T == NullNode ) return 0;
+  int ml = minDepth(T->Right->Left);
+  int mr = minDepth(T->Right->Right);
+  return (ml < mr ? ml : mr) + 1;
+}
+

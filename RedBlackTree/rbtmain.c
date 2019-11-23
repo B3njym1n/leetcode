@@ -1,7 +1,7 @@
 #include "rbt.h"
 #include <stdio.h>
 
-#define N 8
+#define N 800
 
 int main() {
   RedBlackTree T;
@@ -22,8 +22,17 @@ int main() {
       printf("Error at %d\n", i);
   }
 
+  int max = maxDepth(T);
+  int min = minDepth(T);
+  printf("Max Depth is %d", max);
+  printf("Min Depth is %d", min);
+  printf("\n");
   preorderTraverse(T);
-  printf("Min is %d, Max is %d\n", Retrieve(FindMin(T)), Retrieve(FindMax(T)));
+  for (int i = 1; i <= max+4; i++) {
+    LevelTraverse(T, i);
+    printf("\n");
+  }
+  // printf("Min is %d, Max is %d\n", Retrieve(FindMin(T)), Retrieve(FindMax(T)));
 
   return 0;
 }
