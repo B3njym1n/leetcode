@@ -10,27 +10,21 @@ struct RedBlackNode {
   RedBlackTree Left;
   RedBlackTree Right;
   ColorType Color;
-};
+} nnil = {NegInfinity, &nnil, &nnil, Black};
 
-static Position NullNode = NULL; /* Needs initialization */
+
+static Position NullNode = &nnil; /* Needs initialization */
+
 
 /* Initialization Procedure */
 RedBlackTree Initialize(void)
 {
   RedBlackTree T;
-  if (NullNode == NULL) {
-    NullNode = malloc(sizeof ( struct RedBlackNode));
-    if (NullNode == NULL)
-      printf("Out of space!!!");
-    NullNode->Left = NullNode->Right = NullNode;
-    NullNode->Color = Black;
-    NullNode->Element = 12345;
-  }
 
   /* Create the header node */
   T = malloc(sizeof (struct RedBlackNode));
   if (T == NULL)
-    printf("Out of space!!!");
+    printf("Out of memory!!!");
   T->Element = NegInfinity;
   T->Left = T->Right = NullNode;
   T->Color = Black;
@@ -45,19 +39,46 @@ void Output(ElementType Element)
   printf("%d\n", Element);
 }
 
-/* Print the tree, watch out for NullNode */
-/* and skip header */
-static void DoPrint(RedBlackTree T) {
-  if (T != NullNode) {
-    DoPrint(T->Left);
-    Output(T->Element);
-    DoPrint(T->Right);
-  }
+struct trunk {
+  struct trunk *prev;
+  char *str;
+};
+
+void disp_trunks(struct trunk* p) {
+  if (!p) return;
+  disp_trunks(p->prev);
+  printf("%s", p->str);
 }
 
-void PrintTree(RedBlackTree T)
+void PrintTree(RedBlackTree T, struct trunk *prev, int is_left)
 {
-  DoPrint(T->Right);
+  if (T == NullNode) return;
+
+  struct trunk this_disp = { prev, "    "};
+  char *prev_str = this_disp.str;
+  PrintTree(T->Left, &this_disp, 1);
+  if (!prev) {
+    this_disp.str = "---";
+  } else if (is_left) {
+    this_disp.str = ".--";
+    prev_str = "   |";
+  } else {
+    this_disp.str = "`--";
+    prev->str = prev_str;
+  }
+
+  disp_trunks(&this_disp);
+  if (T->Color == Black) {
+    printf(KGRN "%d\n" KNRM, T->Element);
+  } else {
+    printf(KRED "%d\n" KNRM, T->Element);
+  }
+
+  if (prev) prev->str = prev_str;
+  this_disp.str = "   |";
+
+  PrintTree(T->Right, &this_disp, 0);
+  if (!prev) puts("");
 }
 
 Position Find(ElementType X, RedBlackTree T)
@@ -238,5 +259,10 @@ int minDepth(RedBlackTree T) {
   int ml = minDepth(T->Right->Left);
   int mr = minDepth(T->Right->Right);
   return (ml < mr ? ml : mr) + 1;
+}
+
+
+void Delete(RedBlackTree T, ElementType Item) {
+  
 }
 
