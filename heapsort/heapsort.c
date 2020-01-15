@@ -42,9 +42,9 @@ void heap_sort(int a[], compare_func func_pointer, int len)
     int child;
 
     child = parents;
-/* bottom-up downheap */
+    /* bottom-up downheap */
 
-/* leaf-search for largest child path */
+    /* leaf-search for largest child path */
     while (child <= half)
     {
       ++level;
@@ -53,7 +53,7 @@ void heap_sort(int a[], compare_func func_pointer, int len)
         child++;
     }
     
-/* bottom-up-search for rotation point */
+    /* bottom-up-search for rotation point */
     tmp = a[parents - 1];
     for (;;)
     {

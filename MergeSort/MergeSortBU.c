@@ -6,7 +6,7 @@
 // bottom up merge sort
 
 void merge_sort_bu(int target[], int aux[], int size);
-void _merge(int target[], int aux[], int left, int mid ,int right);
+void merge_(int target[], int aux[], int left, int mid ,int right);
 void swap(int* p1, int* p2);
 void display(int a[], const int size);
 
@@ -28,13 +28,13 @@ void merge_sort_bu(int target[], int aux[], int size)
       int left = i; 
       int right= ((i + 2*scale - 1) > size - 1) ? size - 1 : (i + 2*scale - 1);
       printf("left %d, right %d\n", left ,right);
-      _merge(target, aux, left, left+scale - 1, right); 
+      merge_(target, aux, left, left+scale - 1, right); 
       display(target, SIZE);
     }
   }
 }
 
-void _merge(int target[], int aux[], int left, int mid ,int right)
+void merge_(int target[], int aux[], int left, int mid ,int right)
 {
   if (left < right)
   {
