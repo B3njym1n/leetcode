@@ -260,9 +260,3 @@ int minDepth(RedBlackTree T) {
   int mr = minDepth(T->Right->Right);
   return (ml < mr ? ml : mr) + 1;
 }
-
-
-void Delete(RedBlackTree T, ElementType Item) {
-  
-}
-

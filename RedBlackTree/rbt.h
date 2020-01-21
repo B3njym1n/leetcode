@@ -24,5 +24,4 @@ RedBlackTree Insert(ElementType X, RedBlackTree T);
 RedBlackTree delete(ElementType X, RedBlackTree T);
 ElementType Retrieve(Position P);
 void PrintTree(RedBlackTree T, struct trunk *prev, int is_left);
-void Delete(RedBlackTree T, ElementType Item);
 #endif 
