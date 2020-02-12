@@ -12,9 +12,7 @@ struct RedBlackNode {
   ColorType Color;
 } nnil = {NegInfinity, &nnil, &nnil, Black};
 
-
-static Position NullNode = &nnil; /* Needs initialization */
-
+static const Position NullNode = &nnil; /* Needs initialization */
 
 /* Initialization Procedure */
 RedBlackTree Initialize(void)
@@ -133,9 +131,9 @@ ElementType Retrieve(Position P) {
 
 static Position X, P, GP, GGP;
 
-/* This function can be called only if K1 has a right child */
-/* Perform a rotate between a node (K1) and its right child */
-/*   update heights, then turn new root */
+/* This function can be called only if K1 has a right chid */
+/* Perform a rotate between a node (K1) and its right chid */
+/* update heights, then turn new root */
 static Position SingleRotateWithRight(Position K1) {
   Position K2;
   K2 = K1->Right;
@@ -145,9 +143,9 @@ static Position SingleRotateWithRight(Position K1) {
   return K2; /* New root */
 }
 
-/* This function can be called only if K2 has a left child */
-/* Perform a rotate between a noke (K2) and its left child */
-/*   update heights, then return new root */
+/* This function can be called only if K2 has a left chid */
+/* Perform a rotate between a noke (K2) and its left chid */
+/* update heights, then return new root */
 static Position SingleRotateWithLeft(Position K2) {
   Position K1;
   K1 = K2->Left;
@@ -159,7 +157,7 @@ static Position SingleRotateWithLeft(Position K2) {
 
 /* Perform a rotation at node X */
 /* (whose parent is passed as a parameter) */
-/* The child is deduced by examining Item */
+/* The chid is deduced by examining Item */
 static Position Rotate(ElementType Item, Position Parent) {
   if (Item < Parent->Element)
     return Parent->Left = Item < Parent->Left->Element ?
@@ -216,18 +214,173 @@ RedBlackTree Insert(ElementType Item, RedBlackTree T) {
   return T;
 }
 
-RedBlackTree
-Remove(ElementType Item, RedBlackTree T) {
-  printf("Remove is unimplemented\n");
-  if (Item)
-    return T;
+RedBlackTree Delete(ElementType Item, RedBlackTree T)
+{
+  X = P = GP = T;
+  printf("Deleting %d\n", Item);
+  /* Ensure that X is Red when we arrive at next node,
+   * we are sure that P is Red and X and S is Black 
+   * both X and Sibling chidren are black
+   * color both X and S red and color their parent black
+   *
+   * If one or more S's chidren is red
+   * If both S's chidren are red, we can apply either rotation.
+   *  __P__
+   * /      \
+   * X      S
+   *       /
+   *      Red
+   *  __P__
+   * /      \
+   * X      S
+   *         \
+   *          Red 
+   *
+   * recoloring make sure that P is Black and X is Red
+   * if at least one chid of X is Red
+   * if we advance to the red chid of X
+   *  next subproblem
+   * if we advance to the black chid of X
+   * rotate S and P to make X's new parent Red and next loop will back to main case 
+   **/
+  Position S, Next, NextS, Delete = NullNode;
+  Next = X->Right;
+  NextS = X->Left;
+  while (Next != NullNode) {
+    printf("next %d\n", Next->Element);
+    GP = P;
+    P = X;
+    X = Next;
+    S = NextS;
+    if (X->Element < Item) {
+      Next = X->Right;
+      NextS = X->Left;
+    } else if (X->Element > Item) {
+      Next = X->Left;
+      NextS = X->Right;
+    } else {
+      Delete = X;
+      Next = X->Right;
+      NextS = X->Left;
+    }
+    if ( X->Color != Red && Next->Color != Red)
+    {
+      if ( NextS->Color == Red)
+      {
+        if (X->Element < NextS->Element)
+        {
+          X->Color = Red;
+          if (X->Element < P->Element)
+          {
+            NextS->Color = Black;
+            P = P->Left = SingleRotateWithRight(X);
+          }
+          else
+          {
+            NextS->Color = Black;
+            P = P->Right = SingleRotateWithRight(X);
+          }
+        }
+        else
+        {
+          X->Color = Red;
+          if (X->Element > P->Element)
+          {
+            NextS->Color = Black;
+            P = P->Left = SingleRotateWithLeft(X);
+          }
+          else
+          {
+            NextS->Color = Black;
+            P = P->Left = SingleRotateWithLeft(X);
+          }
+        }
+      }
+      else if ( NextS->Color == Black)
+      {
+        if ( S != NullNode)
+        {
+          if (S->Left->Color == Black && S->Right->Color == Black)
+          {
+            /* just flip color */
+            P->Color = Black;
+            X->Color = Red;
+            S->Color = Red;
+          }
+          else
+          {
+            P->Color = Black;
+            X->Color = Red;
+            if (P->Element < S->Element)
+            {
+              if (S->Left->Color == Red)
+              {
+                P->Right = SingleRotateWithLeft(S);
+              }
+              else
+              {
+                S->Color = Red;
+                S->Right->Color = Black;
+              }
+              if (GP->Element < S->Element) 
+              {
+                GP->Right = SingleRotateWithRight(P);
+              }
+              else
+              {
+                GP->Left =  SingleRotateWithRight(P);
+              }
+            }
+            else
+            {
+              if (S->Right->Color == Red)
+              {
+                P->Left = SingleRotateWithRight(S);
+              }
+              else
+              {
+                S->Color = Red;
+                S->Left->Color = Black;
+                P = SingleRotateWithLeft(P);
+              }
+              if (GP->Element < S->Element)
+              {
+                GP->Right = SingleRotateWithLeft(P);
+              }
+              else
+              {
+                GP->Left =  SingleRotateWithLeft(P);
+              }
+            }
+          }
+        }
+      }
+    }
+    PrintTree(T, 0, 0);
+  }
+
+  if (Delete != NullNode)
+  {
+    Delete->Element = X->Element;
+    printf("P: %d X: %d\n", P->Element, X->Element);
+    if (P->Element > X->Element)
+    {
+      P->Left = NullNode;
+    }
+    else
+    {
+      P->Right = NullNode;
+    }
+    free(X);
+  }
   return T;
 }
 
+/**
 void LevelTraverse(RedBlackTree T, int level) {
   if ( T == NullNode )
     return ;
-  if (level == 1)
+  if (LC_COLLATEvel == 1)
     {
       printf("%d ", T->Element);
     }
@@ -245,8 +398,9 @@ void preorderTraverse(RedBlackTree T) {
   printf("%d ", T->Element);
   preorderTraverse(T->Right);
 }
+**/
 
-/* assume tree's root node is dump node */
+/** assume tree's root node is dump node
 int maxDepth(RedBlackTree T) {
   if (T == NullNode ) return 0;
   int ml = maxDepth(T->Right->Left);
@@ -260,3 +414,4 @@ int minDepth(RedBlackTree T) {
   int mr = minDepth(T->Right->Right);
   return (ml < mr ? ml : mr) + 1;
 }
+**/

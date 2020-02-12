@@ -11,6 +11,8 @@ int main() {
 
   for (i = 0; i < MAX; i++, j = (j + 7) % MAX)
     T = Insert(j, T);
+  /* for (i = 0; i < MAX; i++)
+   *   T = Insert(i, T); */
 
   printf("Insertion complete\n");
   
@@ -20,5 +22,9 @@ int main() {
     if (( P = Find(i, T)) == NULL || Retrieve(P) != i)
       printf("Error at %d\n", i);
   }
+
+
+  Delete( 18, T);
+  PrintTree(T, 0, 0);
   return 0;
 }
