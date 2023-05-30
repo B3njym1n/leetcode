@@ -23,9 +23,9 @@ void permutation(char str[], int i, int size) {
   }
   for (int j = i; j < size; j++) {
     swap(str + i, str + j);
-    if ( i != j) swap(str + j, str + i+1);
+    /* if ( i != j) swap(str + j, str + i+1); */
     permutation(str, i+1, size);
-    if ( i != j) swap(str + j, str + i+1);
+    /* if ( i != j) swap(str + j, str + i+1); */
     swap(str + i, str + j);
   }
 }
