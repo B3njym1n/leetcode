@@ -1,1 +1,1 @@
-# leetcode and Other demo code
+# leetcode and Other snippet code
