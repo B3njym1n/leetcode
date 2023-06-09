@@ -1,6 +1,6 @@
-# from math import inf
 from typing import List
 
+# python -m doctest -v main.py
 class Solution:
     def modifiedGraphEdges(self, n: int, edges: List[List[int]], source: int, destination: int, target: int) -> List[List[int]]:
         """Modify Graph Edge Weights
