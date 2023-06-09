@@ -11,11 +11,14 @@ void display(int a[], const int size);
 int main() {
   int a[SIZE] = {8, 5, 2, 3, 1, 6, 9, 4, 0, 7};
 
+#ifdef _DEBUG
   display(a, SIZE);
-
+#endif
   heap_sort(a, compare, SIZE);
 
+#ifdef _DEBUG
   display(a, SIZE);
+#endif
   return 0;
 }
 
@@ -32,7 +35,7 @@ void heap_sort(int a[], compare_func func_pointer, int len)
 {
   int half;
   int parents;
-  if (len <= 1)
+  if (len < 2)
     return;
   half = len >> 1;
   for (parents = half; parents >= 1; --parents)
