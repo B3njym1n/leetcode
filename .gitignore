@@ -6,3 +6,5 @@
 *.a
 *.so
 *~
+*.pyc
+*/__pycache__
