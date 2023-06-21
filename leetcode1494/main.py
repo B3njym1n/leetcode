@@ -35,8 +35,6 @@ class Solution:
                     if (bin(s).count('1') <= k):
                         dp[i | s] = min(dp[i | s], dp[i]+1)
                     s = (s-1) & mask
-            if dp[-1] != n+1:
-                return dp[-1]
         return dp[-1]
     
 
